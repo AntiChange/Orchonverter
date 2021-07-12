@@ -1,0 +1,11 @@
+click==7.1.2
+Flask==1.1.4
+itsdangerous==1.1.0
+Jinja2==2.11.3
+Lasagne @ https://github.com/Lasagne/Lasagne/archive/master.zip
+MarkupSafe==1.1.1
+numpy==1.16.6
+scipy==1.2.3
+six==1.16.0
+Theano @ https://github.com/Theano/Theano/archive/master.zip
+Werkzeug==1.0.1
