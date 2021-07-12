@@ -187,16 +187,20 @@ for wav_file in wavList:
 
 instruments = glob.glob("./instruments/*")
 
+instrument_list = []
+
 for line in instruments:
     currentInstrument = line.split("/")[-1]
     currentInstrument = currentInstrument[12:]
+
+    instrument_list.append(currentInstrument)
 
     path = line + "/*"
     fileList = glob.glob(path)  # List of all wav files
     count = 0
     filePath = line + "/chunk" + str(count) + ".wav"
 
-    filePath.replace("\\", "/")
+    filePath.replace("\\", "/") #I don't think this actually works but it shouldn't matter
 
     # replace with while(coumt < 7) for testing purposes Path(filePath)
     while (os.path.exists(filePath)):
@@ -224,3 +228,14 @@ for line in instruments:
         filePath = line + "/chunk" + str(count) + ".wav"
 
 print(instrumentDict)
+
+files = glob.glob("./instruments/*")
+for i_path in files:
+    waves = glob.glob(i_path + "/*")
+    for wave_file in waves:
+        os.remove(wave_file)
+
+for i_path in files:
+    os.rmdir(i_path)
+
+os.rmdir("./instruments")
