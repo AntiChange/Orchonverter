@@ -1,3 +1,9 @@
+from pydub.utils import make_chunks
+from pydub import AudioSegment
+import pydub
+from pathlib import Path
+import glob
+import pickle
 import zipfile
 import os
 import json
@@ -18,16 +24,17 @@ from sklearn.neural_network import MLPClassifier
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import LinearSVC
 from sklearn.svm import SVC
+from scipy import stats
 
 import matplotlib.pyplot as plt
 
-#Constant parameters for model
-REMOVE_BEGIN=0.0
-REMOVE_END=0.0
-FILTER_INTENSITY=1e6
+# Constant parameters for model
+REMOVE_BEGIN = 0.0
+REMOVE_END = 0.0
+FILTER_INTENSITY = 0
 
 
-#Function to obtain spectrogram from wav file
+# Function to obtain spectrogram from wav file
 def get_spectrogram(file_name, remove_begin=0, remove_end=0, filter_intensity=0):
     """
     Provide spectrogram associated to a WAV file
@@ -53,7 +60,8 @@ def get_spectrogram(file_name, remove_begin=0, remove_end=0, filter_intensity=0)
         samples = samples[:-samples_to_remove]
 
     # Computing spectogram
-    frequencies, times, spectrogram = signal.spectrogram(samples, fs=sample_rate, nperseg=1024)
+    frequencies, times, spectrogram = signal.spectrogram(
+        samples, fs=sample_rate, nperseg=1024)
 
     # Getting max intensity for each time bucket
     max_intensity = np.amax(spectrogram, axis=0)
@@ -63,7 +71,9 @@ def get_spectrogram(file_name, remove_begin=0, remove_end=0, filter_intensity=0)
 
     return frequencies, times[selections], spectrogram[:, selections], max_intensity[selections], sample_rate, samples
 
-#Function to display spectrogram
+# Function to display spectrogram
+
+
 def display_spectrogram(frequencies, times, spectrogram, sample_rate, samples):
     """
     Display spectrogram
@@ -84,7 +94,8 @@ def display_spectrogram(frequencies, times, spectrogram, sample_rate, samples):
     axs[1].set_title("Spectrogram (method 1)")
 
     # Plotting spectogram (method 2)
-    axs[2].specgram(samples, Fs=sample_rate, NFFT=25, noverlap=5, detrend='mean', mode='psd')
+    axs[2].specgram(samples, Fs=sample_rate, NFFT=25,
+                    noverlap=5, detrend='mean', mode='psd')
     axs[2].set_ylabel('Frequency [Hz]')
     axs[2].set_xlabel('Time [sec]')
     axs[2].set_title("Spectrogram (method 2)")
@@ -120,8 +131,7 @@ def prepare_data(file_name, samples, labels):
             labels.append(value['pitch'])
 
 
-#Loading Modal and Sclaer
-import pickle
+# Loading Modal and Sclaer
 model_name = './saved-model/valid_pitch_detection_model.pkl'
 scaler_filename = './saved-model/valid_pitch_detection_scaler.pkl'
 
@@ -130,12 +140,87 @@ loaded_scaler = pickle.load(open(scaler_filename, 'rb'))
 
 samples_prediction = []
 
-# Preprocessing
-prepare_data('./Testing wav files/bass_synthetic_009-078-127.wav', samples_prediction, None)
-samples_prediction_scaled = loaded_scaler.transform(samples_prediction)
-samples_prediction_scaled = np.asarray(samples_prediction_scaled)
+# # Preprocessing
+# prepare_data('./Testing wav files/bass_synthetic_009-078-127.wav', samples_prediction, None)
+# samples_prediction_scaled = loaded_scaler.transform(samples_prediction)
+# samples_prediction_scaled = np.asarray(samples_prediction_scaled)
 
-# Prediction
-result = loaded_model.predict(samples_prediction_scaled)
+# # Prediction
+# result = loaded_model.predict(samples_prediction_scaled)
 
-print(result)
+# print(result)
+
+
+# Beats per minute
+BPM = 120
+
+# Notes per beat
+NPB = 8
+
+# For example, let us work with 32nd notes
+chunk_length_ms = float(60000 / BPM / NPB)
+
+wavList = glob.glob("./SeparatedParts/*")
+print(wavList)
+
+instrumentDict = {}
+
+os.makedirs("instruments")
+
+for wav_file in wavList:
+    current_audio = AudioSegment.from_file(wav_file, "wav")
+    chunks = make_chunks(current_audio, chunk_length_ms)
+
+    new_dir_name = wav_file.split("/")[-1]
+    instrumentName_wav = new_dir_name.split("_")[-1]
+    instrumentName = instrumentName_wav.split(".")[0]
+
+    os.makedirs("instruments/" + instrumentName)
+
+    instrumentDict[instrumentName] = []
+
+    for i, chunk in enumerate(chunks):
+        chunk_name = "chunk{0}.wav".format(i)
+        file_path = "instruments/" + instrumentName + "/" + chunk_name
+        print("exporting", chunk_name)
+        chunk.export(file_path, format="wav")
+
+instruments = glob.glob("./instruments/*")
+
+for line in instruments:
+    currentInstrument = line.split("/")[-1]
+    currentInstrument = currentInstrument[12:]
+
+    path = line + "/*"
+    fileList = glob.glob(path)  # List of all wav files
+    count = 0
+    filePath = line + "/chunk" + str(count) + ".wav"
+
+    filePath.replace("\\", "/")
+
+    # replace with while(coumt < 7) for testing purposes Path(filePath)
+    while (os.path.exists(filePath)):
+        print(filePath)
+        try:
+            # Use pitch detection on every chunk
+            samples_prediction = []
+
+            # Preprocessing
+            prepare_data(filePath, samples_prediction, None)
+            samples_prediction_scaled = loaded_scaler.transform(
+                samples_prediction)
+            samples_prediction_scaled = np.asarray(samples_prediction_scaled)
+
+            # Prediction
+            result = loaded_model.predict(samples_prediction_scaled).tolist()
+
+            mode = max(set(result), key=result.count)
+            instrumentDict[currentInstrument].append(mode)
+
+        except ValueError:
+            instrumentDict[currentInstrument].append(-1)
+
+        count += 1
+        filePath = line + "/chunk" + str(count) + ".wav"
+
+print(instrumentDict)
