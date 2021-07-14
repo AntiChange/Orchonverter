@@ -28,6 +28,7 @@ from scipy import stats
 
 import matplotlib.pyplot as plt
 
+
 # Constant parameters for model
 REMOVE_BEGIN = 0.0
 REMOVE_END = 0.0
@@ -228,6 +229,9 @@ for line in instruments:
         filePath = line + "/chunk" + str(count) + ".wav"
 
 print(instrumentDict)
+
+
+
 
 files = glob.glob("./instruments/*")
 for i_path in files:
