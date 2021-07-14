@@ -31,8 +31,8 @@ import matplotlib.pyplot as plt
 
 # Constant parameters for model
 REMOVE_BEGIN = 0.0
-REMOVE_END = 0.0
-FILTER_INTENSITY = 0
+REMOVE_END = 0.9
+FILTER_INTENSITY = 1e2
 
 
 # Function to obtain spectrogram from wav file
@@ -156,7 +156,7 @@ samples_prediction = []
 BPM = 120
 
 # Notes per beat
-NPB = 2
+NPB = 1
 
 # For example, let us work with 32nd notes
 chunk_length_ms = float(60000 / BPM / NPB)
