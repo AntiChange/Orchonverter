@@ -32,7 +32,7 @@ import matplotlib.pyplot as plt
 # Constant parameters for model
 REMOVE_BEGIN = 0.0
 REMOVE_END = 0.9
-FILTER_INTENSITY = 1e2
+FILTER_INTENSITY = 0
 
 
 # Function to obtain spectrogram from wav file
