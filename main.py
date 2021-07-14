@@ -31,7 +31,7 @@ import matplotlib.pyplot as plt
 
 # Constant parameters for model
 REMOVE_BEGIN = 0.0
-REMOVE_END = 0.9
+REMOVE_END = 0.0
 FILTER_INTENSITY = 0
 
 
@@ -153,10 +153,10 @@ samples_prediction = []
 
 
 # Beats per minute
-BPM = 120
+BPM = 80
 
 # Notes per beat
-NPB = 1
+NPB = 2
 
 # For example, let us work with 32nd notes
 chunk_length_ms = float(60000 / BPM / NPB)

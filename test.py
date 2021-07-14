@@ -28,22 +28,21 @@ def intToNote(midi_int):
         return ("b", midi_int//12)
 
 
-testingDict = {'bassoon': [94, 94, 54, 94, 54, 54, 94, 57, 94, 94, 94, 94, 94, 94, 51, 94, 28, 94, 54, 94, 94, 96, 51, 57, 94, 94, 94, 94, 94, 78, 94, 94, 94, 94, 94, 94, 94, 94, 94, 51, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 51, 51, 94, 94], 'clarinet': [94, 58, 94, 94, 94, 94, 94, 47, 94, 94, 49, 94, 94, 94, 94, 94, 94, 94, 94, 59, 94, 94, 94, 48, 94, 49, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 46, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 49, 94, 94, 94, 59, 94, 94, 94, 94, 94], 'saxphone': [92, 94, 92, 94, 94, 94, 94, 94, 94, 94, 44, 92, 94, 51, 94, 94, 54, 94, 92, 94, 94, 94, 94, 94, 94, 94, 56, 94, 94, 51, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 94, 51, 94, 49, 51, 94, 94, 94, 94, 93, 94, 94, 94, 94, 94, 94, 94], 'violin': [94, 94, 94, 94, 68, 94, 94, 
-68, 94, 94, 94, 90, 94, 94, 94, 94, 94, 94, 94, 94, 68, 94, 94, 68, 94, 94, 94, 90, 94, 94, 94, 94, 94, 68, 94, 94, 94, 68, 94, 94, 94, 94, 68, 94, 94, 94, 94, 94, 94, 94, 94, 90, 94, 94, 94, 90, 94]}
+testingDict = {'bass': [90, 90, 90, 90, 90, 90, 90, 102]}
 
 lilyString = "{ \\time 4/4 \\key c \\major "
 
-testingInstrument = 'bassoon'
+testingInstrument = 'bass'
 
 for i in range(len(testingDict[testingInstrument])):
     lilyString += intToNote(testingDict[testingInstrument][i])[0]
-    if intToNote(testingDict[testingInstrument][i])[1] > 4:
-        for i in range(intToNote(testingDict[testingInstrument][i])[1] - 4):
-            lilyString += "\'"
-    elif intToNote(testingDict[testingInstrument][i])[1] < 4:
-        for i in range(4 - intToNote(testingDict[testingInstrument][i])[1]):
-            lilyString += ","
-    lilyString += "8 "
+    # if intToNote(testingDict[testingInstrument][i])[1] > 4:
+    #     for i in range(intToNote(testingDict[testingInstrument][i])[1] - 4):
+    #         lilyString += "\'"
+    # elif intToNote(testingDict[testingInstrument][i])[1] < 4:
+    #     for i in range(4 - intToNote(testingDict[testingInstrument][i])[1]):
+    #         lilyString += ","
+    lilyString += "'4 "
 
 lilyString += "}"
 
