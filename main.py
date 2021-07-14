@@ -156,7 +156,7 @@ samples_prediction = []
 BPM = 120
 
 # Notes per beat
-NPB = 8
+NPB = 2
 
 # For example, let us work with 32nd notes
 chunk_length_ms = float(60000 / BPM / NPB)
