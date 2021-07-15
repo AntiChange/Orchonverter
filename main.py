@@ -131,7 +131,7 @@ def prepare_data(file_name, samples, labels):
             labels.append(value['pitch'])
 
 
-# Loading Modal and Sclaer
+# Loading Modal and Scaler
 model_name = './saved-model/valid_pitch_detection_model.pkl'
 scaler_filename = './saved-model/valid_pitch_detection_scaler.pkl'
 
@@ -155,7 +155,7 @@ samples_prediction = []
 BPM = 120
 
 # Notes per beat
-NPB = 8
+NPB = 2
 
 # For example, let us work with 32nd notes
 chunk_length_ms = float(60000 / BPM / NPB)
@@ -167,6 +167,9 @@ instrumentDict = {}
 
 os.makedirs("instruments")
 
+chunk_volumes = {}
+
+# chunk single melody audios into smaller chunks
 for wav_file in wavList:
     current_audio = AudioSegment.from_file(wav_file, "wav")
     chunks = make_chunks(current_audio, chunk_length_ms)
@@ -178,20 +181,38 @@ for wav_file in wavList:
     os.makedirs("instruments/" + instrumentName)
 
     instrumentDict[instrumentName] = []
+    chunk_volumes[instrumentName] = []
 
     for i, chunk in enumerate(chunks):
+        chunk_volumes[instrumentName].append(chunk)
+        shrinked_chunk = chunk[50:200]
+        # print("instrumentName: ", instrumentName, i)
+        # print(shrinked_chunk.rms)
+
+        #Determine rests
+        #pitch = -1 means rest, -2 means to be predicted by model
+        if shrinked_chunk.rms < 300:
+            #if the previous chunk is also a rest
+            instrumentDict[instrumentName].append(-1) #8 = eighth note, 4 = quater note, etc.
+        else:
+            instrumentDict[instrumentName].append(-2)
+
         chunk_name = "chunk{0}.wav".format(i)
         file_path = "instruments/" + instrumentName + "/" + chunk_name
-        print("exporting", chunk_name)
+        # print("exporting", chunk_name)
         chunk.export(file_path, format="wav")
 
 instruments = glob.glob("./instruments/*")
 
+
+
 instrument_list = []
+midi = {}
 
 for line in instruments:
     currentInstrument = line.split("/")[-1]
     currentInstrument = currentInstrument[12:]
+    midi[currentInstrument] = []
 
     instrument_list.append(currentInstrument)
 
@@ -204,31 +225,68 @@ for line in instruments:
 
     # replace with while(coumt < 7) for testing purposes Path(filePath)
     while (os.path.exists(filePath)):
-        print(filePath)
-        try:
-            # Use pitch detection on every chunk
-            samples_prediction = []
+        if instrumentDict[currentInstrument][count] == -2:
+            # print(filePath)
+            try:
+                # Use pitch detection on every chunk
+                samples_prediction = []
 
-            # Preprocessing
-            prepare_data(filePath, samples_prediction, None)
-            samples_prediction_scaled = loaded_scaler.transform(
-                samples_prediction)
-            samples_prediction_scaled = np.asarray(samples_prediction_scaled)
+                # Preprocessing
+                prepare_data(filePath, samples_prediction, None)
+                samples_prediction_scaled = loaded_scaler.transform(
+                    samples_prediction)
+                samples_prediction_scaled = np.asarray(samples_prediction_scaled)
 
-            # Prediction
-            result = loaded_model.predict(samples_prediction_scaled).tolist()
+                # Prediction
+                result = loaded_model.predict(samples_prediction_scaled).tolist()
 
-            mode = max(set(result), key=result.count)
-            instrumentDict[currentInstrument].append(mode)
+                mode = max(set(result), key=result.count)
+                # instrumentDict[currentInstrument].append(mode)
+                instrumentDict[currentInstrument][count] = mode
 
-        except ValueError:
-            instrumentDict[currentInstrument].append(-1)
+            except ValueError:
+                # instrumentDict[currentInstrument].append(-1)
+                instrumentDict[currentInstrument][count] = -1
+
+
+        #determine if is repeated notes
+        def repeated_notes (currentInstrument, count):
+            if instrumentDict[currentInstrument][count] != -1:
+                #find min volume
+                vol = chunk_volumes[currentInstrument][count]
+                min = vol[0:1].rms
+                max = vol[0:1].rms
+                for i in range(1,60):
+                    # if currentInstrument == "violin" and count == 4:
+                    #     print("volume",vol[i:i+1].rms,"\n")
+                    if vol[i:i+1].rms < min:
+                        min = vol[i:i+1].rms
+                    if vol[i:i+1].rms > max:
+                        max = vol[i:i+1].rms
+                    # min = min(vol[i:i+1].rms, min)
+                # if currentInstrument == "violin" and count == 4:
+                #     print("MIN: ",min)
+                #     print("MAX: ",max)
+                # print(count, vol.rms)
+                if min/max < 0.25:
+                    return 1 #TRUE
+                else:
+                    return 0 #FALSE
+        
+        #Merge chunks by their duration
+        if count > 0 and instrumentDict[currentInstrument][count] == instrumentDict[currentInstrument][count-1] and repeated_notes(currentInstrument, count) == 0:   
+            midi[currentInstrument][-1][1] += 1
+            # print(midi[currentInstrument][-1][1])
+        else:
+            midi[currentInstrument].append([instrumentDict[currentInstrument][count],1])
 
         count += 1
         filePath = line + "/chunk" + str(count) + ".wav"
 
-print(instrumentDict)
+print("instrumentDict",instrumentDict,"\n")
+print("midi",midi)
 
+# delete the audio chunks after processing
 files = glob.glob("./instruments/*")
 for i_path in files:
     waves = glob.glob(i_path + "/*")
@@ -239,3 +297,4 @@ for i_path in files:
     os.rmdir(i_path)
 
 os.rmdir("./instruments")
+
