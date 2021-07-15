@@ -28,6 +28,7 @@ from scipy import stats
 
 import matplotlib.pyplot as plt
 
+
 # Constant parameters for model
 REMOVE_BEGIN = 0.0
 REMOVE_END = 0.0
@@ -152,7 +153,7 @@ samples_prediction = []
 
 
 # Beats per minute
-BPM = 120
+BPM = 80
 
 # Notes per beat
 NPB = 2
