@@ -4,7 +4,7 @@ import statistics
 import music21
 
 pitch_outputs_and_rests = [
-    output2hz(p) if c >= 0.9 else 0
+    output2hz(p) if c >= 0.8 else 0
     for i, p, c in zip(indices, pitch_outputs, confidence_outputs)
 ]
 print(pitch_outputs_and_rests)
@@ -36,7 +36,7 @@ def quantize_predictions(group, ideal_offset):
   zero_values_count = len(group) - len(non_zero_values)
 
   # Create a rest if 80% is silent, otherwise create a note.
-  if zero_values_count > 0.8 * len(group):
+  if zero_values_count > 0.7 * len(group):
     # Interpret as a rest. Count each dropped note as an error, weighted a bit
     # worse than a badly sung note (which would 'cost' 0.5).
     return 0.51 * len(non_zero_values), "Rest"
@@ -107,17 +107,17 @@ while best_notes_and_rests[-1] == 'Rest':
 # Creating the sheet music score.
 sc = music21.stream.Score()
 # Adjust the speed to match the actual singing.
-bpm = 60 * 60 / best_predictions_per_note
-# bpm = 120
+# bpm = 60 * 60 / best_predictions_per_note
+bpm = 120
 print ('bpm: ', bpm)
 a = music21.tempo.MetronomeMark(number=bpm)
 sc.insert(0,a)
 
 for snote in best_notes_and_rests:   
-    d = 'eighth'
-    d_rest = 'half'
+    d = 'eighth' 
+    d_rest = 'half' 
     if snote == 'Rest':      
-      sc.append(music21.note.Rest(type=d))
+      sc.append(music21.note.Rest(type=d_d_rest))
     else:
       sc.append(music21.note.Note(snote, type=d))
 

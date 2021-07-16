@@ -27,7 +27,7 @@ pitch_outputs = [ float(x) for x in pitch_outputs]
 
 indices = range(len (pitch_outputs))
 confident_pitch_outputs = [ (i,p)  
-  for i, p, c in zip(indices, pitch_outputs, confidence_outputs) if  c >= 0.9  ]
+  for i, p, c in zip(indices, pitch_outputs, confidence_outputs) if  c >= 0.8  ]
 confident_pitch_outputs_x, confident_pitch_outputs_y = zip(*confident_pitch_outputs)
  
 # fig, ax = plt.subplots()
