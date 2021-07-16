@@ -1,7 +1,9 @@
 import tensorflow as tf
 import tensorflow_hub as hub
+from pydub.utils import make_chunks
+from pydub import AudioSegment
 
-from data_prep import audio_samples
+from data_prep import audio_samples, duration
 
 # Loading the SPICE model is easy:
 model = hub.load("https://tfhub.dev/google/spice/2")
@@ -25,9 +27,20 @@ confidence_outputs = 1.0 - uncertainty_outputs
 confidence_outputs = list(confidence_outputs)
 pitch_outputs = [ float(x) for x in pitch_outputs]
 
+#get volume
+#chunk audio into small pieces
+num = len(pitch_outputs)
+current_audio = AudioSegment.from_file("09-Jesus_fast_violin.wav", "wav")
+
+# For example, let us work with 32nd notes
+chunk_length_ms = float(duration / num)
+chunks = make_chunks(current_audio, chunk_length_ms)
+
+
+
 indices = range(len (pitch_outputs))
 confident_pitch_outputs = [ (i,p)  
-  for i, p, c in zip(indices, pitch_outputs, confidence_outputs) if  c >= 0.8  ]
+  for i, p, c in zip(indices, pitch_outputs, confidence_outputs) if  c >= 0.8 and chunks[i].rms > 50 ]
 confident_pitch_outputs_x, confident_pitch_outputs_y = zip(*confident_pitch_outputs)
  
 # fig, ax = plt.subplots()
