@@ -17,10 +17,7 @@ app = Flask(__name__)
 
 @app.route("/", methods=["GET"])
 def hi_world():
-    #  a = request.json.get("a")
-    #  b = request.json.get("b")
-    #  paras = {"a":a, "b":b}
-    # response = requests.get(url="http://127.0.0.1:8000/")
+    response = requests.get(url="http://127.0.0.1:8000/")
     
     wavList = glob.glob("../melody_separator/src/output/*")
     all_pitches = []

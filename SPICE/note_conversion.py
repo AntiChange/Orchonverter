@@ -3,6 +3,8 @@ import math
 import statistics
 import music21
 
+from display import exportSheet
+
 def main_note (indices, pitch_outputs, confidence_outputs, output2hz):
   pitch_outputs_and_rests = [
       output2hz(p) if c >= 0.8 else 0
@@ -173,4 +175,5 @@ def main_note (indices, pitch_outputs, confidence_outputs, output2hz):
   # rendering the music score
   showScore(sc)
   print(best_notes_and_rests)
+  exportSheet(best_notes_and_rests)
   return best_notes_and_rests
