@@ -2,7 +2,7 @@ from mingus.extra.lilypond import *
 from mingus.containers import Bar
 
 def lilypondConversion(noteString):
-    if noteString == "rest":
+    if noteString == "Rest":
         return "r8"
 
     newNote = noteString[0]
