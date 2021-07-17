@@ -1,11 +1,6 @@
 from mingus.extra.lilypond import *
 from mingus.containers import Bar
 
-
-#2D LIST
-exampleList = [["C4", "D4","D4","E4","E4","E4","F4","F4","F4","F4","G4","G4","G4","G4", "G4","A4","A4","A4","A4","A4","A4","G4","G4","G4","G4","G4","G4", "G4","A4","A4","A4","A4","A4","A4","A4","A4","C4","A#4","B4","C4", "C#4","D4","D#4","E4","E#4","F4","F#4","G4","G#4","A4","A#4","B4"], ["B4", "A#4","A4","G#4","G4","F#4","F4","E4","D#4","D4","C#4","C4","B4", "A#4","A4","G#4","G4","F#4","F4","E4","D#4","D4","C#4","C4","B4", "A#4","A4","G#4","G4","F#4","F4","E4","D#4","D4","C#4","C4","B4", "A#4","A4","G#4","G4","F#4","F4","E4","D#4","D4","C#4","C4"]]
-
-
 def lilypondConversion(noteString):
     newNote = noteString[0]
     newNote = newNote.lower()
@@ -39,7 +34,6 @@ def exportSheet(inputList):
         
         newOuterList.append(newInnerList)
     
-    print(newOuterList)
 
     lilyStringfull = "\\time 4/4 \\key c \\major {\n<<\n"
 
@@ -94,7 +88,4 @@ def exportSheet(inputList):
     lilyStringfull += ">>\n}"
     # to_pdf(lilyString, "output.pdf")
 
-    print(lilyStringfull)
     to_pdf(lilyStringfull, 'output.pdf')
-
-exportSheet(exampleList)
