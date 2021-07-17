@@ -175,5 +175,5 @@ def main_note (indices, pitch_outputs, confidence_outputs, output2hz):
   # rendering the music score
   showScore(sc)
   print(best_notes_and_rests)
-  exportSheet(best_notes_and_rests)
+  # exportSheet(best_notes_and_rests)
   return best_notes_and_rests

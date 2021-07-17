@@ -8,6 +8,8 @@ import requests
 app = Flask(__name__)
 
 UPLOAD_FOLDER = os.path.join(app.root_path, 'melody_separator/src/input')
+DOWNLOAD_FOLDER = os.path.join(app.root_path, 'SPICE')
+DOWNLOAD_PDF = 'output.pdf'
 # os.makedirs(uploads_dir)
 ALLOWED_EXTENSIONS = {'wav'}
 
@@ -38,8 +40,8 @@ def upload_file():
             file.save(os.path.join(UPLOAD_FOLDER, secure_filename(filename)))
             #passing parameter
             paras = {"input":filename}
-            response = requests.get(url="http://127.0.0.1:5002/", params = paras)
-            return redirect(url_for('download_file', name=filename))
+            # response = requests.get(url="http://127.0.0.1:5002/", params = paras)
+            return redirect(url_for('download_file'))
     return '''
     <!doctype html>
     <title>Upload new File</title>
@@ -50,9 +52,9 @@ def upload_file():
     </form>
     '''
 
-@app.route('/uploads/<name>')
-def download_file(name):
-    return send_from_directory(UPLOAD_FOLDER, name)
+@app.route('/downloads')
+def download_file():
+    return send_from_directory(DOWNLOAD_FOLDER, DOWNLOAD_PDF)
 
 
 if __name__ == '__main__':

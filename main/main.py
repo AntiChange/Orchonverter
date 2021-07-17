@@ -173,6 +173,7 @@ chunk_volumes = {}
 # chunk single melody audios into smaller chunks
 for wav_file in wavList:
     current_audio = AudioSegment.from_file(wav_file, "wav")
+    current_audio += 30
     chunks = make_chunks(current_audio, chunk_length_ms)
 
     new_dir_name = wav_file.split("/")[-1]
@@ -212,7 +213,7 @@ midi = {}
 
 for line in instruments:
     currentInstrument = line.split("/")[-1]
-    currentInstrument = currentInstrument[12:]
+    # currentInstrument = currentInstrument[12:]
     midi[currentInstrument] = []
 
     instrument_list.append(currentInstrument)
@@ -240,6 +241,7 @@ for line in instruments:
 
                 # Prediction
                 result = loaded_model.predict(samples_prediction_scaled).tolist()
+                print(currentInstrument,": ",result,"\n")
 
                 mode = max(set(result), key=result.count)
                 # instrumentDict[currentInstrument].append(mode)
@@ -287,15 +289,15 @@ for line in instruments:
 print("instrumentDict",instrumentDict,"\n")
 print("midi",midi)
 
-# delete the audio chunks after processing
-files = glob.glob("./instruments/*")
-for i_path in files:
-    waves = glob.glob(i_path + "/*")
-    for wave_file in waves:
-        os.remove(wave_file)
+# # delete the audio chunks after processing
+# files = glob.glob("./instruments/*")
+# for i_path in files:
+#     waves = glob.glob(i_path + "/*")
+#     for wave_file in waves:
+#         os.remove(wave_file)
 
-for i_path in files:
-    os.rmdir(i_path)
+# for i_path in files:
+#     os.rmdir(i_path)
 
-os.rmdir("./instruments")
+# os.rmdir("./instruments")
 

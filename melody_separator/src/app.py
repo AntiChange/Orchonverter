@@ -1,5 +1,4 @@
 from flask import Flask, request
-# from gevent.pywsgi import WSGIServer
 
 from separate_bach10 import main
 
@@ -11,6 +10,7 @@ def separate_melody():
     outdir = 'output'
     model = 'model_fft_rwc_synth_one_aug_more_4096_blind_nomp_all.pkl'
     main(inputfile, outdir, model)
+    
     print "separate_melody is done"
     return 'separate_melody is done'
 

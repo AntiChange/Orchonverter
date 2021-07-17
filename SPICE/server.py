@@ -3,6 +3,7 @@ from flask import Flask, jsonify, request
 
 import glob
 from data_prep import main
+from display import exportSheet
 
 app = Flask(__name__)
 
@@ -15,6 +16,7 @@ def audio_to_note():
   for wav_file in wavList:
     file_name = wav_file
     all_pitches.append(main(file_name))
+    exportSheet(all_pitches)
     print("audio_to_note is done")
   return all_pitches
 
