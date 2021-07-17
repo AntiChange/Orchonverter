@@ -3,10 +3,7 @@ from mingus.containers import Bar
 
 
 #2D LIST
-exampleList = [["C4", "C4","D4","D4","D4","D4","F4","F#4","F4","F4","F4","F4","F4","C4", "C#4","D4","D#4","E4","E#4","F4","F#4","G4","G#4","A4","A#4","B4","C4", "C#4","D4","D#4","E4","E#4","F4","F#4","G4","G#4","A4","A#4","B4","C4", "C#4","D4","D#4","E4","E#4","F4","F#4","G4","G#4","A4","A#4","B4"], ["B4", "A#4","A4","G#4","G4","F#4","F4","E4","D#4","D4","C#4","C4","B4", "A#4","A4","G#4","G4","F#4","F4","E4","D#4","D4","C#4","C4","B4", "A#4","A4","G#4","G4","F#4","F4","E4","D#4","D4","C#4","C4","B4", "A#4","A4","G#4","G4","F#4","F4","E4","D#4","D4","C#4","C4"]]
-
-print(len(exampleList[0]))
-print(len(exampleList[1]))
+exampleList = [["C4", "D4","D4","E4","E4","E4","F4","F4","F4","F4","G4","G4","G4","G4", "G4","A4","A4","A4","A4","A4","A4","G4","G4","G4","G4","G4","G4", "G4","A4","A4","A4","A4","A4","A4","A4","A4","C4","A#4","B4","C4", "C#4","D4","D#4","E4","E#4","F4","F#4","G4","G#4","A4","A#4","B4"], ["B4", "A#4","A4","G#4","G4","F#4","F4","E4","D#4","D4","C#4","C4","B4", "A#4","A4","G#4","G4","F#4","F4","E4","D#4","D4","C#4","C4","B4", "A#4","A4","G#4","G4","F#4","F4","E4","D#4","D4","C#4","C4","B4", "A#4","A4","G#4","G4","F#4","F4","E4","D#4","D4","C#4","C4"]]
 
 
 def lilypondConversion(noteString):
@@ -66,11 +63,13 @@ def exportSheet(inputList):
                         currentLilyString += i[j] + str(int(newFloat)) + " "
                     else:
                         if currentCount == 3:
-                            currentLilyString += i[j] + "4. "
+                            currentLilyString +=  i[j] + "4. "
                         elif currentCount == 5:
-                            currentLilyString += i[j] + "2 " + i[j] + "8 "
+                            currentLilyString +=  i[j] + "2~ " + i[j] + "8 "
+                        elif currentCount == 6:
+                            currentLilyString +=  i[j] + "2~ " + i[j] + "4 "
                         elif currentCount == 7:
-                            currentLilyString += i[j] + "2 " + i[j] + "4. "
+                            currentLilyString += i[j] + "2~ " + i[j] + "4. " 
                     
                     currentCount = 1
            
