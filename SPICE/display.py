@@ -1,8 +1,10 @@
 from mingus.extra.lilypond import *
 from mingus.containers import Bar
 
-
 def lilypondConversion(noteString):
+    if noteString == "Rest":
+        return "r8"
+
     newNote = noteString[0]
     newNote = newNote.lower()
 
@@ -27,21 +29,70 @@ def lilypondConversion(noteString):
 
 
 def exportSheet(inputList):
-    newList = []
-
-
+    newOuterList = []
     for i in inputList:
-        newList.append(lilypondConversion(i))
+        newInnerList = []
+        for j in i:
+            newInnerList.append(lilypondConversion(j))
+        
+        newOuterList.append(newInnerList)
 
-    # print(newList)
+        # print(newOuterList)
 
-    lilyString = "{ \\time 4/4 \\key c \\major "
+    lilyStringfull = "\\time 4/4 \\key c \\major {\n<<\n"
 
-    for j in newList:
-        lilyString += j + "8 "
+    for i in newOuterList:
+        currentLilyString = "\\new Staff { "
 
-    lilyString += "}"
+        currentCount = 1
+        for j in range(len(i)):
+            if i[j] == "r8":
+                currentLilyString += "r8 "
+            else:
+                try:
+                    if currentCount == 8:
+                        currentLilyString += i[j] + "1 "
+                        currentCount = 1
 
-    # print(lilyString)
+                    elif i[j] == i[j + 1]:
+                        currentCount += 1
+                        continue
+                    
+                    else:
+                        newFloat = 8 / currentCount
+                        if newFloat.is_integer():
+                            currentLilyString += i[j] + str(int(newFloat)) + " "
+                        else:
+                            if currentCount == 3:
+                                currentLilyString +=  i[j] + "4. "
+                            elif currentCount == 5:
+                                currentLilyString +=  i[j] + "2~ " + i[j] + "8 "
+                            elif currentCount == 6:
+                                currentLilyString +=  i[j] + "2~ " + i[j] + "4 "
+                            elif currentCount == 7:
+                                currentLilyString += i[j] + "2~ " + i[j] + "4. " 
+                        
+                        currentCount = 1
+            
+                except IndexError:
+                    newFloat = 8 / currentCount
+                    if newFloat.is_integer():
+                        currentLilyString += i[j] + str(int(newFloat)) + " "
+                    else:
+                        if currentCount == 3:
+                            currentLilyString += i[j] + "4. "
+                        elif currentCount == 5:
+                            currentLilyString += i[j] + "2 " + i[j] + "8 "
+                        elif currentCount == 7:
+                            currentLilyString += i[j] + "2 " + i[j] + "4. "
+                 
+        currentLilyString += "}\n"
 
-    to_pdf(lilyString, "output.pdf")
+        lilyStringfull +=  currentLilyString
+
+
+    lilyStringfull += ">>\n}"
+
+    # print(lilyStringfull)
+
+    to_pdf(lilyStringfull, 'output.pdf')
