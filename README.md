@@ -31,13 +31,13 @@ Our project can be divided into 3 parts:
   - However, it did not achieve the accuracy as expected, therefore an alternative is to use a pre-trained pitch detection model [SPICE](https://www.tensorflow.org/hub/tutorials/spice) from Tensorflow.  
 - The third part is to split the single-melody audio into multiple same-length chunks. So that each small chunk only has one pitch worth of audio, then we are able to get the pitch for every piece. Then we wrote an algorithm to put all chunk’s pitches together, and determine the note duration and rest based on the volume percentages.
 
-## Installation and Running for beta version
+## Installation and Running for the beta version
 - Install [Lilypond](http://lilypond.org/download.html) for music engraving or transcription
 - Currently we implemented some old libraries, therefore we host our application servers in both Python 2 and 3 environments. Running them in a virtual environment is recommanded.
 ### Host server in Python 3 environemnt:
 1. run the frontend server to upload the input wav file, then output a music sheet PDF file with all instrument parts separately.
 ```
-python2 web.py
+python3 web.py
 ```
 server will be hosted on: http://127.0.0.1:8080/
 
@@ -45,7 +45,7 @@ server will be hosted on: http://127.0.0.1:8080/
 ```
 cd SPICE
 pip install -r requirements.txt
-python server.py
+python3 server.py
 ```
 server will be hosted on: http://127.0.0.1:5002/
 
