@@ -16,8 +16,9 @@ def audio_to_note():
   for wav_file in wavList:
     file_name = wav_file
     all_pitches.append(main(file_name))
-    exportSheet(all_pitches)
     print("audio_to_note is done")
+    
+  exportSheet(all_pitches)
   return all_pitches
 
 if __name__ == '__main__':

@@ -11,7 +11,7 @@ def separate_melody():
     model = 'model_fft_rwc_synth_one_aug_more_4096_blind_nomp_all.pkl'
     main(inputfile, outdir, model)
     
-    print "separate_melody is done"
+    print ("separate_melody is done")
     return 'separate_melody is done'
 
 if __name__ == '__main__':
