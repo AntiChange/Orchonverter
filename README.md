@@ -33,10 +33,11 @@ Our project can be divided into 3 parts:
 
 ## Installation and Running for the beta version
 - Install [Lilypond](http://lilypond.org/download.html) for music engraving or transcription
-- Currently we implemented some old libraries, therefore we host our application servers in both Python 2 and 3 environments. Running them in a virtual environment is recommanded.
+- Currently we implemented some old libraries, therefore we host our application servers in both Python 2 and 3 environments. Running them in separate virtual environments is recommanded.
 ### Host server in Python 3 environemnt:
 1. run the frontend server to upload the input wav file, then output a music sheet PDF file with all instrument parts separately.
 ```
+pip install -r requirements.txt
 python3 web.py
 ```
 server will be hosted on: http://127.0.0.1:8080/
