@@ -14,7 +14,8 @@ The project utilizes two different machine learning models; the first being a pr
 
 Finally, we feed these phrases into a music engraver to create proper sheet music containing each part.
 
-
 ## License
-
 This project is licensed under the terms of the MIT license.
+
+## Link to model: (Reqruied in melody_separator\src\)
+https://drive.google.com/file/d/1FeelPlTMdCidVh7PILsbDFA781I6elhx/view?usp=sharing
