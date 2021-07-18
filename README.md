@@ -3,7 +3,7 @@
 
 If you're someone without perfect pitch or relative pitch, music is pretty much impossible to transcribe into sheet music. Even for experienced and skilled transcribers, transcriptions are extremely tedious to create and take excessively large amounts of time. Thus, we created Orchonverter to quickly create a sheet music score of any musical work. Currently it is mainly geared towards orchestral or chamber music, but in the future we hope to implement different models for different genres of music.
 
-Winner of the S21 Uwaterloo CSC x DSC Project Program!
+1st Place Winner of the S21 Uwaterloo CSC x DSC Project Program!
 
 ## Authors
 * [Nancy Shen](https://github.com/nancyluyishen) and [Chris Fang](https://github.com/AntiChange)
