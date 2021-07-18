@@ -1,5 +1,4 @@
 # Orchonverter
-**Note: Currently the project is too messy/complicated to install and is undergoing major changes to increase accuracy! Instructions for installation and running will be added when available, thank you for your patience.**
 
 If you're someone without perfect pitch or relative pitch, music is pretty much impossible to transcribe into sheet music. Even for experienced and skilled transcribers, transcriptions are extremely tedious to create and take excessively large amounts of time. Thus, we created Orchonverter to quickly create a sheet music score of any musical work. Currently it is mainly geared towards orchestral or chamber music, but in the future we hope to implement different models for different genres of music.
 
@@ -32,6 +31,7 @@ Our project can be divided into 3 parts:
 - The third part is to split the single-melody audio into multiple same-length chunks. So that each small chunk only has one pitch worth of audio, then we are able to get the pitch for every piece. Then we wrote an algorithm to put all chunk’s pitches together, and determine the note duration and rest based on the volume percentages.
 
 ## Installation and Running for the beta version
+**Note: Currently there are some known issues with Lilypond on Mac and Theano on Windows.**
 - Install [Lilypond](http://lilypond.org/download.html) for music engraving or transcription
 - Currently we implemented some old libraries, therefore we host our application servers in both Python 2 and 3 environments. Running them in separate virtual environments is recommanded.
 ### Host server in Python 3 environemnt:
