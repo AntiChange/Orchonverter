@@ -13,15 +13,12 @@ The project utilizes two different machine learning models; the first being a pr
 
 Finally, we feed these phrases into a music engraver to create proper sheet music containing each part.
 
-## License
-This project is licensed under the terms of the MIT license.
+## Demo
+Original wav file:
+https://drive.google.com/file/d/1rBm2sDxPr-_MfBuEHo6FI6x_EquLaL8J/view?usp=sharing
 
-## Link to model: (Reqruied in melody_separator\src\)
-https://drive.google.com/file/d/1FeelPlTMdCidVh7PILsbDFA781I6elhx/view?usp=sharing
-
-## Pitch Detection model training on Google Colab
-https://colab.research.google.com/drive/1aQFJIys7IdlBCfkN1GjGNg5ktrrzr8WB?usp=sharing
-
+Converted music sheet: </br>
+![image](https://user-images.githubusercontent.com/46879202/126733175-24a8f939-923a-4c92-a655-266cfb62294f.png)
 
 ## Project Architecture
 Our project can be divided into 3 parts: 
@@ -62,3 +59,12 @@ server will be hosted on: http://127.0.0.1:8000/
 ### Server Structure
 The 3 servers are in an onion strucutre. The order is: 1 > 2 > 3, from the outer most to the inner most.
 <br />To run the application, go to http://127.0.0.1:8080/
+
+## Link to model: (Reqruied in melody_separator\src\)
+https://drive.google.com/file/d/1FeelPlTMdCidVh7PILsbDFA781I6elhx/view?usp=sharing
+
+## Training of pitch detection model on Google Colab
+https://colab.research.google.com/drive/1aQFJIys7IdlBCfkN1GjGNg5ktrrzr8WB?usp=sharing
+
+## License
+This project is licensed under the terms of the MIT license.
